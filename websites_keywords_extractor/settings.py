@@ -8,6 +8,8 @@
 #     http://doc.scrapy.org/en/latest/topics/settings.html
 #     http://scrapy.readthedocs.org/en/latest/topics/downloader-middleware.html
 #     http://scrapy.readthedocs.org/en/latest/topics/spider-middleware.html
+import os
+
 
 BOT_NAME = 'websites_keywords_extractor'
 
@@ -61,9 +63,10 @@ NEWSPIDER_MODULE = 'websites_keywords_extractor.spiders'
 
 # Configure item pipelines
 # See http://scrapy.readthedocs.org/en/latest/topics/item-pipeline.html
-#ITEM_PIPELINES = {
+ITEM_PIPELINES = {
 #    'websites_keywords_extractor.pipelines.SomePipeline': 300,
-#}
+    'websites_keywords_extractor.pipelines.SaveToSqlitePipeline': 300
+}
 
 # Enable and configure the AutoThrottle extension (disabled by default)
 # See http://doc.scrapy.org/en/latest/topics/autothrottle.html
@@ -83,3 +86,43 @@ NEWSPIDER_MODULE = 'websites_keywords_extractor.spiders'
 #HTTPCACHE_DIR='httpcache'
 #HTTPCACHE_IGNORE_HTTP_CODES=[]
 #HTTPCACHE_STORAGE='scrapy.extensions.httpcache.FilesystemCacheStorage'
+
+
+
+
+## Customized setting
+PROJECT_PATH = {
+    'base': os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
+    'setting': os.path.dirname(os.path.abspath(__file__)),
+    'spiders': os.path.dirname(os.path.abspath(__file__)) + '/spiders/',
+    'data': os.path.dirname(os.path.abspath(__file__)) + '/data/'
+}
+
+
+SQLITE = {
+    'file': 'keywords.db',
+    'tables': [
+        {
+            'name': 'urls',
+            'sql': 'CREATE TABLE urls(name TEXT, timestamp INTEGER)'
+        },
+        {
+            'name': 'keywords',
+            'sql': 'CREATE TABLE keywords(word TEXT, count INTEGET)'
+        }
+    ]
+}
+
+
+KEYWORD_EXTRACTOR = {
+    'allow_domains':[
+        'baidu.com'
+    ],
+
+    'start_urls':(
+        'http://www.baidu.com',
+
+    )
+
+}
+

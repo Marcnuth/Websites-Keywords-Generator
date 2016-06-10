@@ -8,7 +8,6 @@
 import scrapy
 
 
-class WebsitesKeywordsExtractorItem(scrapy.Item):
-    # define the fields for your item here like:
-    # name = scrapy.Field()
-    pass
+class KeywordsItem(scrapy.Item):
+    content = scrapy.Field()
+    url = scrapy.Field()
